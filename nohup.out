@@ -1,1 +1,5 @@
 2025-07-08 11:39:11,515 - runner - INFO - Starting Signal Runner
+2025-07-08 11:49:16,985 - runner - ERROR - Error sending webhook: Object of type Timestamp is not JSON serializable
+2025-07-08 11:54:18,362 - runner - ERROR - Error sending webhook: Object of type Timestamp is not JSON serializable
+2025-07-08 11:59:19,293 - runner - ERROR - Error sending webhook: Object of type Timestamp is not JSON serializable
+2025-07-08 11:59:19,732 - runner - ERROR - Error sending webhook: Object of type Timestamp is not JSON serializable

@@ -1,16 +1,21 @@
 from typing import Optional, List, Tuple
 import numpy as np
 import pandas as pd
-from pydantic import BaseModel
-from ta.trend import EMAIndicator
+from pydantic import BaseModel, Field
+from ta.trend import EMAIndicator, SMAIndicator
 from ta.volatility import BollingerBands
 from ta.momentum import RSIIndicator
 from ta.volume import VolumeWeightedAveragePrice
+import logging
 
-from pydantic import Field
-import pandas as pd
+# Configure strategy logging
+strategy_logger = logging.getLogger('strategies')
+strategy_logger.setLevel(logging.INFO)
+handler = logging.FileHandler('strategies.log')
+handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+strategy_logger.addHandler(handler)
+
 class Signal(BaseModel):
-    data_frame: Optional[pd.DataFrame] = Field(exclude=True)
     pair: str
     direction: str  # "BUY" or "SELL"
     strategy: str
@@ -20,16 +25,98 @@ class Signal(BaseModel):
     targets: List[float]
     confidence: float  # 0.60 to 1.0
     momentum: str  # "LOW", "MEDIUM", "HIGH"
-    data_frame: Optional[pd.DataFrame] = None  # Raw OHLCV data for monitoring
+    data_frame: Optional[pd.DataFrame] = Field(exclude=True)
     early_exit: bool = False
     momentum_change: Optional[str] = None
     strategy_invalidated: bool = False
+    exit_reason: Optional[str] = None
 
     class Config:
-        arbitrary_types_allowed = True  # For DataFrame field
+        arbitrary_types_allowed = True
+        json_encoders = {
+            pd.DataFrame: lambda df: df.to_dict(orient='records') if df is not None else None
+        }
+
+def check_trend_reversal(signal: Signal, df: pd.DataFrame) -> bool:
+    """Check for trend reversal conditions"""
+    ema9 = EMAIndicator(df['close'], window=9).ema_indicator().iloc[-1]
+    ema21 = EMAIndicator(df['close'], window=21).ema_indicator().iloc[-1]
+    
+    if signal.direction == "BUY" and ema9 < ema21:
+        strategy_logger.warning(f"Trend reversal detected for {signal.pair} {signal.strategy}")
+        return True
+    elif signal.direction == "SELL" and ema9 > ema21:
+        strategy_logger.warning(f"Trend reversal detected for {signal.pair} {signal.strategy}")
+        return True
+    return False
+
+def check_momentum_crash(signal: Signal, df: pd.DataFrame) -> bool:
+    """Check for momentum crash conditions"""
+    rsi = RSIIndicator(df['close']).rsi().iloc[-1]
+    
+    if signal.direction == "BUY" and rsi < 45:
+        strategy_logger.warning(f"Momentum crash (RSI={rsi:.1f}) for {signal.pair}")
+        return True
+    elif signal.direction == "SELL" and rsi > 55:
+        strategy_logger.warning(f"Momentum crash (RSI={rsi:.1f}) for {signal.pair}")
+        return True
+    return False
+
+def check_vwap_rejection(signal: Signal, df: pd.DataFrame) -> bool:
+    """Check for VWAP rejection (for VWAP strategy only)"""
+    if signal.strategy != "VWAP Breakout":
+        return False
+        
+    vwap = VolumeWeightedAveragePrice(
+        high=df['high'],
+        low=df['low'],
+        close=df['close'],
+        volume=df['volume'],
+        window=20
+    ).volume_weighted_average_price().iloc[-1]
+    
+    current_price = df['close'].iloc[-1]
+    
+    if signal.direction == "BUY" and current_price < vwap:
+        strategy_logger.warning(f"VWAP rejection for {signal.pair}")
+        return True
+    elif signal.direction == "SELL" and current_price > vwap:
+        strategy_logger.warning(f"VWAP rejection for {signal.pair}")
+        return True
+    return False
+
+def validate_signal(signal: Signal) -> Optional[Signal]:
+    """Enhanced signal validation with safety checks"""
+    if signal.confidence < 0.6:
+        return None
+    if len(signal.targets) != 3:
+        return None
+    if signal.direction not in ["BUY", "SELL"]:
+        return None
+    if signal.entry <= 0 or signal.stop <= 0:
+        return None
+        
+    # Apply safety checks
+    if check_trend_reversal(signal, signal.data_frame):
+        signal.early_exit = True
+        signal.strategy_invalidated = True
+        signal.exit_reason = "TREND_REVERSAL"
+        
+    if check_momentum_crash(signal, signal.data_frame):
+        signal.early_exit = True
+        signal.momentum_change = "LOW"
+        signal.exit_reason = "MOMENTUM_CRASH"
+        
+    if check_vwap_rejection(signal, signal.data_frame):
+        signal.early_exit = True
+        signal.strategy_invalidated = True
+        signal.exit_reason = "VWAP_REJECTION"
+        
+    return signal
 
 # --------------------------
-# STRATEGY IMPLEMENTATIONS
+# STRATEGY IMPLEMENTATIONS 
+# (Optimized with all your existing logic)
 # --------------------------
 
 def calculate_vwap_breakout(df: pd.DataFrame, pair: str, timeframe: str) -> Optional[Signal]:
@@ -304,51 +391,8 @@ def calculate_bollinger_squeeze(df: pd.DataFrame, pair: str, timeframe: str) -> 
     
     return None
 
-# --------------------------
-# CORE UTILITIES
-# --------------------------
-
-def validate_signal(signal: Signal) -> Optional[Signal]:
-    """Validate signal meets all requirements"""
-    if signal.confidence < 0.6:
-        return None
-    if len(signal.targets) != 3:
-        return None
-    if signal.direction not in ["BUY", "SELL"]:
-        return None
-    if signal.entry <= 0 or signal.stop <= 0:
-        return None
-    return signal
-
-def detect_momentum_change(df: pd.DataFrame) -> Optional[str]:
-    """Detect momentum loss based on volume/price action"""
-    if len(df) < 3:
-        return None
-    
-    vol_decrease = df['volume'].iloc[-1] < df['volume'].iloc[-2] * 0.8
-    price_stagnant = abs(df['close'].iloc[-1] - df['close'].iloc[-2]) < 0.001 * df['close'].iloc[-1]
-    
-    if vol_decrease and price_stagnant:
-        return "LOW"
-    return None
-
-def should_exit_early(current_price: float, signal: Signal) -> Tuple[bool, Optional[str]]:
-    """Determine if early exit conditions are met"""
-    # Stop loss hit
-    if (signal.direction == "BUY" and current_price <= signal.stop) or \
-       (signal.direction == "SELL" and current_price >= signal.stop):
-        return True, "STOP_HIT"
-    
-    # Momentum loss
-    if signal.data_frame is not None:
-        momentum = detect_momentum_change(signal.data_frame)
-        if momentum == "LOW":
-            return True, "MOMENTUM_LOW"
-    
-    return False, None
-
 def calculate_all_strategies(df: pd.DataFrame, pair: str, timeframe: str) -> List[Signal]:
-    """Run all strategies and return validated signals"""
+    """Run all strategies and return validated signals with safety checks"""
     strategies = [
         calculate_vwap_breakout,
         calculate_ema_cross,
@@ -361,5 +405,22 @@ def calculate_all_strategies(df: pd.DataFrame, pair: str, timeframe: str) -> Lis
     for strategy in strategies:
         if signal := strategy(df.copy(), pair, timeframe):
             signals.append(signal)
+            strategy_logger.info(f"Generated {signal.strategy} signal for {pair} {timeframe}")
     
     return signals
+
+def should_exit_early(current_price: float, signal: Signal) -> Tuple[bool, Optional[str]]:
+    """Enhanced early exit detection"""
+    # Price-based exits
+    if (signal.direction == "BUY" and current_price <= signal.stop) or \
+       (signal.direction == "SELL" and current_price >= signal.stop):
+        return True, "STOP_LOSS_HIT"
+    
+    # Technical exits
+    if signal.strategy_invalidated:
+        return True, signal.exit_reason or "STRATEGY_INVALIDATED"
+    
+    if signal.early_exit:
+        return True, signal.exit_reason or "EARLY_EXIT_TRIGGERED"
+    
+    return False, None
