@@ -1,0 +1,17 @@
+2025-07-08 11:27:10,784 - runner - INFO - Starting Signal Runner
+2025-07-08 11:27:13,074 - runner - ERROR - Error fetching OHLCV for BTC/USDT 3m: name 'pd' is not defined
+2025-07-08 11:27:13,221 - runner - ERROR - Error fetching OHLCV for BTC/USDT 5m: name 'pd' is not defined
+2025-07-08 11:27:13,360 - runner - ERROR - Error fetching OHLCV for BTC/USDT 15m: name 'pd' is not defined
+2025-07-08 11:27:13,507 - runner - ERROR - Error fetching OHLCV for ETH/USDT 3m: name 'pd' is not defined
+2025-07-08 11:27:13,654 - runner - ERROR - Error fetching OHLCV for ETH/USDT 5m: name 'pd' is not defined
+2025-07-08 11:27:13,796 - runner - ERROR - Error fetching OHLCV for ETH/USDT 15m: name 'pd' is not defined
+2025-07-08 11:27:13,936 - runner - ERROR - Error fetching OHLCV for SOL/USDT 3m: name 'pd' is not defined
+2025-07-08 11:27:14,083 - runner - ERROR - Error fetching OHLCV for SOL/USDT 5m: name 'pd' is not defined
+2025-07-08 11:27:14,229 - runner - ERROR - Error fetching OHLCV for SOL/USDT 15m: name 'pd' is not defined
+2025-07-08 11:27:33,587 - runner - INFO - Stopping Signal Runner
+2025-07-08 11:28:17,094 - runner - INFO - Starting Signal Runner
+2025-07-08 11:28:19,530 - runner - ERROR - Error sending webhook: Object of type DataFrame is not JSON serializable
+2025-07-08 11:28:20,429 - runner - ERROR - Error sending webhook: Object of type DataFrame is not JSON serializable
+2025-07-08 11:32:38,701 - runner - INFO - Stopping Signal Runner
+2025-07-08 11:38:01,862 - runner - INFO - Starting Signal Runner
+2025-07-08 11:39:11,515 - runner - INFO - Starting Signal Runner
