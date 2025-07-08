@@ -5,7 +5,7 @@ uvicorn==0.30.1
 # Telegram Bot
 python-telegram-bot==21.2
 
-# Pydantic for validation (v1 is more stable with many libs)
+# Validation
 pydantic==1.10.13
 
 # Market Data (No API key required)
@@ -18,7 +18,5 @@ numpy==1.26.4
 # HTTP requests
 requests==2.31.0
 
-# For parsing form data if needed
+# Form data parsing (optional but supported)
 python-multipart==0.0.9
-numpy
-numpy
