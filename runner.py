@@ -1,5 +1,4 @@
-# Updated runner.py (Final Production Version)
-
+# runner.py
 import ccxt
 import time
 import logging
@@ -23,10 +22,10 @@ class SignalRunner:
     def __init__(self):
         self.exchange = ccxt.binance()  # No API keys needed for OHLCV
         self.cache = SignalCache()
-        self.webhook_url = "http://localhost:8000/webhook"  # Update with your webhook URL
-        self.pairs = ["BTC/USDT", "ETH/USDT", "SOL/USDT"]  # Top liquid pairs
+        self.webhook_url = "http://localhost:8000/webhook"
+        self.pairs = ["BTC/USDT", "ETH/USDT", "SOL/USDT"]
         self.timeframes = ["3m", "5m", "15m"]
-        self.ohlcv_limit = 100  # Number of candles to fetch
+        self.ohlcv_limit = 100
 
     def fetch_ohlcv(self, pair: str, timeframe: str) -> pd.DataFrame:
         try:
@@ -38,44 +37,62 @@ class SignalRunner:
             logger.error(f"Error fetching OHLCV for {pair} {timeframe}: {str(e)}")
             return None
 
+    def send_to_webhook(self, signal) -> bool:
+        try:
+            signal_data = signal.dict(exclude={'data_frame'})
+
+            # Convert all Timestamp objects to string
+            for k, v in signal_data.items():
+                if isinstance(v, pd.Timestamp):
+                    signal_data[k] = v.isoformat()
+
+            # Optionally convert DataFrame if present
+            if signal.data_frame is not None:
+                df = signal.data_frame.copy()
+                if "timestamp" in df.columns:
+                    df["timestamp"] = df["timestamp"].astype(str)
+                signal_data["data_frame"] = df.to_dict(orient="records")
+
+            response = requests.post(
+                self.webhook_url,
+                json=signal_data,
+                timeout=5
+            )
+
+            if response.status_code == 200:
+                logger.info(f"✅ Sent signal: {signal.strategy} {signal.direction} {signal.pair} {signal.timeframe}")
+                return True
+            else:
+                logger.error(f"❌ Webhook failed: {response.status_code} - {response.text}")
+                return False
+
+        except Exception as e:
+            logger.error(f"🚨 Failed to send webhook: {str(e)}")
+            return False
+
     def process_pair(self, pair: str):
         for timeframe in self.timeframes:
             df = self.fetch_ohlcv(pair, timeframe)
-            if df is not None and len(df) > 20:  # Minimum data requirement
+            if df is not None and len(df) > 20:
                 signals = calculate_all_strategies(df, pair, timeframe)
                 for signal in signals:
                     if not self.cache.signal_exists(signal):
-                        try:
-                            signal_dict = signal.dict(exclude={"data_frame"})
-                            if hasattr(signal, 'data_frame') and signal.data_frame is not None:
-                                signal_dict["data_frame"] = signal.data_frame.to_dict(orient="records")
-
-                            response = requests.post(
-                                self.webhook_url,
-                                json=signal_dict,
-                                timeout=5
-                            )
-                            if response.status_code == 200:
-                                self.cache.add_signal(signal)
-                                logger.info(f"✅ Sent new signal: {signal.strategy} {signal.direction} {signal.pair} {signal.timeframe} @ {signal.entry}")
-                            else:
-                                logger.error(f"❌ Webhook failed: {response.status_code} {response.text}")
-                        except Exception as e:
-                            logger.error(f"🔥 Error sending webhook: {str(e)}")
+                        if self.send_to_webhook(signal):
+                            self.cache.add_signal(signal)
 
     def run(self):
-        logger.info("🚀 Starting Signal Runner in PRODUCTION mode")
+        logger.info("🚀 Starting Signal Runner")
         while True:
             try:
                 for pair in self.pairs:
                     self.process_pair(pair)
-                time.sleep(300)  # Run every 5 minutes
+                time.sleep(180)  # Run every 3 minutes
             except KeyboardInterrupt:
-                logger.info("🛑 Stopping Signal Runner")
+                logger.info("🛑 Signal Runner stopped by user")
                 break
             except Exception as e:
-                logger.error(f"⚠️ Runner error: {str(e)}")
-                time.sleep(60)  # Wait before retrying
+                logger.error(f"🔥 Runner error: {str(e)}")
+                time.sleep(60)
 
 if __name__ == "__main__":
     runner = SignalRunner()
