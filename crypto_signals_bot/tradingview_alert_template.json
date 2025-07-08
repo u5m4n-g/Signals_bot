@@ -1,0 +1,18 @@
+{
+  "pair": "{{ticker}}",
+  "direction": "BUY",
+  "strategy": "VWAP Breakout",
+  "timeframe": "{{interval}}",
+  "entry": "{{close}}",
+  "stop": "{{close}} * 0.98",
+  "targets": [
+    "{{close}} * 1.02",
+    "{{close}} * 1.04",
+    "{{close}} * 1.06"
+  ],
+  "confidence": 0.75,
+  "momentum": "HIGH",
+  "early_exit": false,
+  "momentum_change": null,
+  "strategy_invalidated": false
+}
