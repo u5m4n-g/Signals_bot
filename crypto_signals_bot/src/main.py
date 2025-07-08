@@ -55,7 +55,7 @@ async def webhook(request: Request, x_webhook_secret: Optional[str] = Header(Non
         raise HTTPException(status_code=400, detail="Signal validation failed")
 
     if can_send_alert(validated.pair):
-        send_telegram_alert(validated)
+        await send_telegram_alert(validated)
     
     return JSONResponse(content={"message": "Signal processed successfully"}, status_code=200)
 
