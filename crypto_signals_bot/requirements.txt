@@ -20,3 +20,4 @@ requests==2.31.0
 
 # For parsing form data if needed
 python-multipart==0.0.9
+numpy
