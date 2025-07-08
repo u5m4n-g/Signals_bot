@@ -12,4 +12,15 @@ services:
       - key: WEBHOOK_SECRET
         sync: false
 
-
+  - type: worker
+    name: signal-runner
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python runner.py"
+    envVars:
+      - key: TELEGRAM_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: WEBHOOK_SECRET
+        sync: false
