@@ -1,4 +1,5 @@
-# runner.py
+# Updated runner.py (Final Production Version)
+
 import ccxt
 import time
 import logging
@@ -27,7 +28,7 @@ class SignalRunner:
         self.timeframes = ["3m", "5m", "15m"]
         self.ohlcv_limit = 100  # Number of candles to fetch
 
-    def fetch_ohlcv(self, pair: str, timeframe: str) -> List[Dict]:
+    def fetch_ohlcv(self, pair: str, timeframe: str) -> pd.DataFrame:
         try:
             ohlcv = self.exchange.fetch_ohlcv(pair, timeframe, limit=self.ohlcv_limit)
             df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
@@ -46,7 +47,7 @@ class SignalRunner:
                     if not self.cache.signal_exists(signal):
                         try:
                             signal_dict = signal.dict(exclude={"data_frame"})
-                            if signal.data_frame is not None:
+                            if hasattr(signal, 'data_frame') and signal.data_frame is not None:
                                 signal_dict["data_frame"] = signal.data_frame.to_dict(orient="records")
 
                             response = requests.post(
@@ -56,24 +57,24 @@ class SignalRunner:
                             )
                             if response.status_code == 200:
                                 self.cache.add_signal(signal)
-                                logger.info(f"Sent new signal: {signal.strategy} {signal.direction} {signal.pair} {signal.timeframe}")
+                                logger.info(f"✅ Sent new signal: {signal.strategy} {signal.direction} {signal.pair} {signal.timeframe} @ {signal.entry}")
                             else:
-                                logger.error(f"Webhook failed: {response.status_code} {response.text}")
+                                logger.error(f"❌ Webhook failed: {response.status_code} {response.text}")
                         except Exception as e:
-                            logger.error(f"Error sending webhook: {str(e)}")
+                            logger.error(f"🔥 Error sending webhook: {str(e)}")
 
     def run(self):
-        logger.info("Starting Signal Runner")
+        logger.info("🚀 Starting Signal Runner in PRODUCTION mode")
         while True:
             try:
                 for pair in self.pairs:
                     self.process_pair(pair)
                 time.sleep(300)  # Run every 5 minutes
             except KeyboardInterrupt:
-                logger.info("Stopping Signal Runner")
+                logger.info("🛑 Stopping Signal Runner")
                 break
             except Exception as e:
-                logger.error(f"Runner error: {str(e)}")
+                logger.error(f"⚠️ Runner error: {str(e)}")
                 time.sleep(60)  # Wait before retrying
 
 if __name__ == "__main__":
