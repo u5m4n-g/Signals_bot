@@ -1,14 +1,13 @@
 from typing import Optional, List, Tuple
-import numpy as np
 import pandas as pd
-from pydantic import BaseModel, Field
-from ta.trend import EMAIndicator, SMAIndicator
+from pydantic import BaseModel, Field, ConfigDict
+from ta.trend import EMAIndicator
 from ta.volatility import BollingerBands
 from ta.momentum import RSIIndicator
 from ta.volume import VolumeWeightedAveragePrice
 import logging
 
-# Configure strategy logging
+# Configure logging
 strategy_logger = logging.getLogger('strategies')
 strategy_logger.setLevel(logging.INFO)
 handler = logging.FileHandler('strategies.log')
@@ -25,17 +24,19 @@ class Signal(BaseModel):
     targets: List[float]
     confidence: float  # 0.60 to 1.0
     momentum: str  # "LOW", "MEDIUM", "HIGH"
-    data_frame: Optional[pd.DataFrame] = Field(exclude=True)
     early_exit: bool = False
     momentum_change: Optional[str] = None
     strategy_invalidated: bool = False
     exit_reason: Optional[str] = None
+    
+    # Internal use only - never required for webhooks
+    data_frame: Optional[pd.DataFrame] = Field(default=None, exclude=True)
 
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {
-            pd.DataFrame: lambda df: df.to_dict(orient='records') if df is not None else None
-        }
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        json_encoders={pd.DataFrame: lambda _: None},
+        extra='ignore'
+    )
 
 def check_trend_reversal(signal: Signal, df: pd.DataFrame) -> bool:
     """Check for trend reversal conditions"""
@@ -88,12 +89,16 @@ def check_vwap_rejection(signal: Signal, df: pd.DataFrame) -> bool:
 def validate_signal(signal: Signal) -> Optional[Signal]:
     """Enhanced signal validation with safety checks"""
     if signal.confidence < 0.6:
+        strategy_logger.info(f"Signal rejected: Confidence {signal.confidence} < 0.6")
         return None
     if len(signal.targets) != 3:
+        strategy_logger.info(f"Signal rejected: Invalid targets count {len(signal.targets)}")
         return None
     if signal.direction not in ["BUY", "SELL"]:
+        strategy_logger.info(f"Signal rejected: Invalid direction {signal.direction}")
         return None
     if signal.entry <= 0 or signal.stop <= 0:
+        strategy_logger.info(f"Signal rejected: Invalid entry/stop {signal.entry}/{signal.stop}")
         return None
         
     # Apply safety checks
@@ -113,11 +118,6 @@ def validate_signal(signal: Signal) -> Optional[Signal]:
         signal.exit_reason = "VWAP_REJECTION"
         
     return signal
-
-# --------------------------
-# STRATEGY IMPLEMENTATIONS 
-# (Optimized with all your existing logic)
-# --------------------------
 
 def calculate_vwap_breakout(df: pd.DataFrame, pair: str, timeframe: str) -> Optional[Signal]:
     """VWAP Breakout with volume confirmation"""
@@ -173,6 +173,7 @@ def calculate_vwap_breakout(df: pd.DataFrame, pair: str, timeframe: str) -> Opti
         )
         return validate_signal(signal)
     
+    strategy_logger.info(f"VWAP Breakout: No valid signal for {pair} {timeframe}")
     return None
 
 def calculate_ema_cross(df: pd.DataFrame, pair: str, timeframe: str) -> Optional[Signal]:
@@ -220,6 +221,7 @@ def calculate_ema_cross(df: pd.DataFrame, pair: str, timeframe: str) -> Optional
         )
         return validate_signal(signal)
     
+    strategy_logger.info(f"EMA Cross: No valid signal for {pair} {timeframe}")
     return None
 
 def calculate_rsi_divergence(df: pd.DataFrame, pair: str, timeframe: str) -> Optional[Signal]:
@@ -228,6 +230,7 @@ def calculate_rsi_divergence(df: pd.DataFrame, pair: str, timeframe: str) -> Opt
     current_rsi = rsi.iloc[-1]
     
     if len(df) < 15:
+        strategy_logger.info(f"RSI Divergence: Not enough data for {pair} {timeframe}")
         return None
     
     # Bullish divergence detection
@@ -280,6 +283,7 @@ def calculate_rsi_divergence(df: pd.DataFrame, pair: str, timeframe: str) -> Opt
             )
             return validate_signal(signal)
     
+    strategy_logger.info(f"RSI Divergence: No valid signal for {pair} {timeframe}")
     return None
 
 def calculate_support_resistance_break(df: pd.DataFrame, pair: str, timeframe: str) -> Optional[Signal]:
@@ -335,6 +339,7 @@ def calculate_support_resistance_break(df: pd.DataFrame, pair: str, timeframe: s
         )
         return validate_signal(signal)
     
+    strategy_logger.info(f"Support/Resistance Break: No valid signal for {pair} {timeframe}")
     return None
 
 def calculate_bollinger_squeeze(df: pd.DataFrame, pair: str, timeframe: str) -> Optional[Signal]:
@@ -389,10 +394,11 @@ def calculate_bollinger_squeeze(df: pd.DataFrame, pair: str, timeframe: str) -> 
             )
             return validate_signal(signal)
     
+    strategy_logger.info(f"Bollinger Squeeze: No valid signal for {pair} {timeframe}")
     return None
 
 def calculate_all_strategies(df: pd.DataFrame, pair: str, timeframe: str) -> List[Signal]:
-    """Run all strategies and return validated signals with safety checks"""
+    """Run all strategies and return validated signals"""
     strategies = [
         calculate_vwap_breakout,
         calculate_ema_cross,
@@ -406,12 +412,14 @@ def calculate_all_strategies(df: pd.DataFrame, pair: str, timeframe: str) -> Lis
         if signal := strategy(df.copy(), pair, timeframe):
             signals.append(signal)
             strategy_logger.info(f"Generated {signal.strategy} signal for {pair} {timeframe}")
+        else:
+            strategy_logger.debug(f"No signal from {strategy.__name__} for {pair} {timeframe}")
     
     return signals
 
 def should_exit_early(current_price: float, signal: Signal) -> Tuple[bool, Optional[str]]:
-    """Enhanced early exit detection"""
-    # Price-based exits
+    """Determine if early exit conditions are met"""
+    # Stop loss hit
     if (signal.direction == "BUY" and current_price <= signal.stop) or \
        (signal.direction == "SELL" and current_price >= signal.stop):
         return True, "STOP_LOSS_HIT"
