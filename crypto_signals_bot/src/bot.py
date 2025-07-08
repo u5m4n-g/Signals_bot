@@ -34,6 +34,6 @@ def format_alert(signal) -> str:
 def send_telegram_alert(signal) -> None:
     text = format_alert(signal)
     try:
-        bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=text)
+        await bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=text)
     except TelegramError as e:
         print(f"Telegram error: {e}")
