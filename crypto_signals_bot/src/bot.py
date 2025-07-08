@@ -31,7 +31,7 @@ def format_alert(signal) -> str:
         base += "\n" + "\n".join(updates)
     return base
 
-async def await send_telegram_alert(signal) -> None:
+async def send_telegram_alert(signal) -> None:
     text = format_alert(signal)
     try:
         await bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=text)
