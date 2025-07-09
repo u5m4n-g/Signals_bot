@@ -22,7 +22,7 @@ class SignalRunner:
     def __init__(self):
         self.exchange = ccxt.binance()  # No API keys needed for OHLCV
         self.cache = SignalCache()
-        self.webhook_url = "http://localhost:8000/webhook"
+        self.webhook_url = "https://signals-bot-zely.onrender.com/webhook"
         self.pairs = ["BTC/USDT", "ETH/USDT", "SOL/USDT"]
         self.timeframes = ["3m", "5m", "15m"]
         self.ohlcv_limit = 100
