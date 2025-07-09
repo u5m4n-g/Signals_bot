@@ -1,4 +1,5 @@
 # runner.py
+import os
 import ccxt
 import time
 import logging
@@ -7,6 +8,9 @@ import pandas as pd
 from typing import List, Dict
 from crypto_signals_bot.src.strategies import calculate_all_strategies
 from signal_cache import SignalCache
+
+from dotenv import load_dotenv
+load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -54,10 +58,12 @@ class SignalRunner:
                 signal_data["data_frame"] = df.to_dict(orient="records")
 
             response = requests.post(
-                self.webhook_url,
-                json=signal_data,
-                timeout=5
-            )
+    self.webhook_url,
+    json=signal_data,
+    headers={"X-Webhook-Secret": os.getenv("WEBHOOK_SECRET")},
+    timeout=5
+)
+
 
             if response.status_code == 200:
                 logger.info(f"✅ Sent signal: {signal.strategy} {signal.direction} {signal.pair} {signal.timeframe}")
