@@ -64,9 +64,7 @@ async def webhook(request: Request, x_webhook_secret: Optional[str] = Header(Non
 
     try:
         webhook_signal = WebhookSignal(**payload)
-        signal_data = webhook_signal.dict()
-        signal_data["data_frame"] = None
-        signal = Signal(**signal_data)
+        signal = Signal(**webhook_signal.dict(), data_frame=None)
     except ValidationError as e:
         raise HTTPException(status_code=400, detail=f"Signal validation error: {e}")
 
@@ -84,3 +82,5 @@ async def webhook(request: Request, x_webhook_secret: Optional[str] = Header(Non
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+
