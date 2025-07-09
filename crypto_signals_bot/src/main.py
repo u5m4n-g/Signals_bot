@@ -26,7 +26,7 @@ last_alert_time: Dict[str, float] = {
     "SOL/USDT": 0,
 }
 
-class WebhookSignal(BaseModel):
+class Signal(BaseModel):
     pair: str
     direction: str
     strategy: str
@@ -40,9 +40,15 @@ class WebhookSignal(BaseModel):
     momentum_change: Optional[str] = None
     strategy_invalidated: bool = False
     exit_reason: Optional[str] = None
+    data_frame: Optional[pd.DataFrame] = Field(default=None, exclude=True)
 
     class Config:
-        extra = "ignore"
+        arbitrary_types_allowed = True
+        extra = 'ignore'
+        json_encoders = {
+            pd.DataFrame: lambda _: None,
+            pd.Timestamp: lambda ts: ts.isoformat() if not pd.isna(ts) else None
+        }
 
 def can_send_alert(pair: str) -> bool:
     with rate_limit_lock:
