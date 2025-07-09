@@ -8,8 +8,8 @@ from typing import List, Optional, Dict
 import uvicorn
 import pandas as pd
 
-from crypto_signals_bot.src.bot import send_telegram_alert
-from crypto_signals_bot.src.strategies import validate_signal, Signal
+from src.bot import send_telegram_alert
+from src.strategies import validate_signal, Signal
 app = FastAPI()
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
