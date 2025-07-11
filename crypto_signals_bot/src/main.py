@@ -7,9 +7,13 @@ from pydantic import BaseModel, ValidationError
 from typing import List, Optional, Dict
 import uvicorn
 import pandas as pd
+from dotenv import load_dotenv
 
-from src.bot import send_telegram_alert
-from src.strategies import validate_signal, Signal
+from crypto_signals_bot.src.bot import send_telegram_alert
+from crypto_signals_bot.src.strategies import validate_signal, Signal
+from signal_cache import SignalCache
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -24,7 +28,7 @@ rate_limit_lock = threading.Lock()
 last_alert_time: Dict[str, float] = {
     "BTC/USDT": 0,
     "ETH/USDT": 0,
-    "SOL/USDT": 0,
+    "DOGE/USDT": 0,
 }
 
 class WebhookSignal(BaseModel):
@@ -54,11 +58,15 @@ async def webhook(request: Request, x_webhook_secret: Optional[str] = Header(Non
 
     try:
         webhook_signal = WebhookSignal(**payload)
-        signal = Signal(**webhook_signal.dict(), data_frame=None)
+        signal = Signal(**webhook_signal.dict())
     except ValidationError as e:
         raise HTTPException(status_code=400, detail=f"Signal validation error: {e}")
 
-    validated = validate_signal(signal)
+    # The validate_signal function in strategies.py expects a DataFrame, but the webhook payload doesn\"t contain it.
+    # For now, we\"ll pass a dummy DataFrame to avoid errors, but this needs to be addressed if validation logic relies on it.
+    # A better solution would be to refactor validate_signal to not require a DataFrame, or to fetch data within the webhook if necessary.
+    dummy_df = pd.DataFrame()
+    validated = validate_signal(signal, dummy_df)
     if not validated:
         raise HTTPException(status_code=400, detail="Signal failed validation")
 

@@ -4,11 +4,13 @@ import os
 import uuid
 from typing import List, Dict, Optional
 from datetime import datetime, timedelta
+from crypto_signals_bot.src.strategies import Signal
 
 class SignalCache:
     def __init__(self, file_path: str = "signal_cache.json"):
         self.file_path = file_path
         self.cache = self._load_cache()
+        self.next_slno = self._get_next_slno()
 
     def _load_cache(self) -> List[Dict]:
         if os.path.exists(self.file_path):
@@ -26,9 +28,11 @@ class SignalCache:
     def _generate_id(self) -> str:
         return str(uuid.uuid4())
 
-    def add_signal(self, signal: Dict):
-        signal_data = signal.copy()
-        signal_data['id'] = self._generate_id()
+    def add_signal(self, signal: Signal):
+        signal_data = signal.dict(exclude={'data_frame'})
+        signal_data["id"] = self._generate_id()
+        signal_data["slno"] = f"#{self.next_slno:03d}"
+        self.next_slno += 1
         signal_data['timestamp'] = datetime.now().isoformat()
         signal_data['active'] = True
         self.cache.append(signal_data)
@@ -38,14 +42,14 @@ class SignalCache:
         self.cache = [s for s in self.cache if s.get('id') != signal_id]
         self._save_cache()
 
-    def signal_exists(self, signal: Dict) -> bool:
+    def signal_exists(self, signal: Signal) -> bool:
         # Check if similar signal exists (same pair, strategy, direction)
         for s in self.cache:
             if (s['pair'] == signal.pair and
                 s['strategy'] == signal.strategy and
                 s['direction'] == signal.direction and
-                s['timeframe'] == signal.timeframe and
-                s['active'] is True):
+                s["timeframe"] == signal.timeframe and
+                s["active"] is True):
                 return True
         return False
 
@@ -54,7 +58,8 @@ class SignalCache:
         now = datetime.now()
         self.cache = [
             s for s in self.cache
-            if datetime.fromisoformat(s['timestamp']) > now - timedelta(hours=24)
+            if datetime.fromisoformat(s["timestamp"]) > now - timedelta(hours=24) and
+            s["timeframe"] in ["3m", "5m", "15m"]
         ]
         self._save_cache()
         return [s for s in self.cache if s.get('active', False)]
@@ -62,3 +67,17 @@ class SignalCache:
     def clear_cache(self):
         self.cache = []
         self._save_cache()
+
+
+
+    def _get_next_slno(self) -> int:
+        max_slno = 0
+        for s in self.cache:
+            if 'slno' in s and s['slno'] is not None:
+                try:
+                    max_slno = max(max_slno, int(s['slno'].lstrip('#')))
+                except ValueError:
+                    pass
+        return max_slno + 1
+
+

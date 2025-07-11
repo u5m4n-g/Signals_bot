@@ -1,0 +1,201 @@
+Jul 10 10:22:20 AM
+
+File "<frozen importlib.\_bootstrap>", line 688, in \_load\_unlocked
+
+Jul 10 10:22:20 AM
+
+File "<frozen importlib.\_bootstrap\_external>", line 883, in exec\_module
+
+Jul 10 10:22:20 AM
+
+File "<frozen importlib.\_bootstrap>", line 241, in \_call\_with\_frames\_removed
+
+Jul 10 10:22:20 AM
+
+File "/opt/render/project/src/crypto\_signals\_bot/src/main.py", line 12, in <module>
+
+Jul 10 10:22:20 AM
+
+from crypto\_signals\_bot.src.bot import send\_telegram\_alert
+
+Jul 10 10:22:20 AM
+
+ModuleNotFoundError: No module named 'crypto_signals_bot'
+
+Jul 10 10:22:23 AM
+
+\==> Exited with status 1
+
+Jul 10 10:22:23 AM
+
+\==> Common ways to troubleshoot your deploy: [https://render.com/docs/troubleshooting-deploys]()
+
+Jul 10 10:22:29 AM
+
+\==> Running 'uvicorn src.main:app \--host 0.0.0.0 \--port 10000'
+
+Jul 10 10:22:35 AM
+
+Traceback (most recent call last):
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/bin/uvicorn", line 8, in <module>
+
+Jul 10 10:22:35 AM
+
+sys.exit(main())
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/click/core.py", line 1442, in \_\_call\_\_
+
+Jul 10 10:22:35 AM
+
+return self.main(\*args, \*\*kwargs)
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/click/core.py", line 1363, in main
+
+Jul 10 10:22:35 AM
+
+rv \= self.invoke(ctx)
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/click/core.py", line 1226, in invoke
+
+Jul 10 10:22:35 AM
+
+return ctx.invoke(self.callback, \*\*ctx.params)
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/click/core.py", line 794, in invoke
+
+Jul 10 10:22:35 AM
+
+return callback(\*args, \*\*kwargs)
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/uvicorn/main.py", line 410, in main
+
+Jul 10 10:22:35 AM
+
+run(
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/uvicorn/main.py", line 577, in run
+
+Jul 10 10:22:35 AM
+
+server.run()
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 65, in run
+
+Jul 10 10:22:35 AM
+
+return asyncio.run(self.serve(sockets=sockets))
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/python/Python-3.10.13/lib/python3.10/asyncio/runners.py", line 44, in run
+
+Jul 10 10:22:35 AM
+
+return loop.run\_until\_complete(main)
+
+Jul 10 10:22:35 AM
+
+File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run\_until\_complete
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 69, in serve
+
+Jul 10 10:22:35 AM
+
+await self.\_serve(sockets)
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 76, in \_serve
+
+Jul 10 10:22:35 AM
+
+config.load()
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 434, in load
+
+Jul 10 10:22:35 AM
+
+self.loaded\_app \= import\_from\_string(self.app)
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import\_from\_string
+
+Jul 10 10:22:35 AM
+
+raise exc from None
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import\_from\_string
+
+Jul 10 10:22:35 AM
+
+module \= importlib.import\_module(module\_str)
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/python/Python-3.10.13/lib/python3.10/importlib/\_\_init\_\_.py", line 126, in import\_module
+
+Jul 10 10:22:35 AM
+
+return \_bootstrap.\_gcd\_import(name\[level:\], package, level)
+
+Jul 10 10:22:35 AM
+
+File "<frozen importlib.\_bootstrap>", line 1050, in \_gcd\_import
+
+Jul 10 10:22:35 AM
+
+File "<frozen importlib.\_bootstrap>", line 1027, in \_find\_and\_load
+
+Jul 10 10:22:35 AM
+
+File "<frozen importlib.\_bootstrap>", line 1006, in \_find\_and\_load\_unlocked
+
+Jul 10 10:22:35 AM
+
+File "<frozen importlib.\_bootstrap>", line 688, in \_load\_unlocked
+
+Jul 10 10:22:35 AM
+
+File "<frozen importlib.\_bootstrap\_external>", line 883, in exec\_module
+
+Jul 10 10:22:35 AM
+
+File "<frozen importlib.\_bootstrap>", line 241, in \_call\_with\_frames\_removed
+
+Jul 10 10:22:35 AM
+
+File "/opt/render/project/src/crypto\_signals\_bot/src/main.py", line 12, in <module>
+
+Jul 10 10:22:35 AM
+
+from crypto\_signals\_bot.src.bot import send\_telegram\_alert
+
+Jul 10 10:22:35 AM
+
+ModuleNotFoundError: No module named 'crypto_signals_bot'
+
+

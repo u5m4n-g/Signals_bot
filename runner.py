@@ -6,7 +6,7 @@ import logging
 import requests
 import pandas as pd
 from typing import List, Dict
-from src.strategies import calculate_all_strategies
+>>>>>>> df68952
 from signal_cache import SignalCache
 
 from dotenv import load_dotenv
@@ -14,7 +14,7 @@ load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    format=r'%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler('runner.log'),
         logging.StreamHandler()
@@ -24,11 +24,11 @@ logger = logging.getLogger('runner')
 
 class SignalRunner:
     def __init__(self):
-        self.exchange = ccxt.binance()  # No API keys needed for OHLCV
+        self.exchange = ccxt.kraken()  # Changed from binance to kraken
         self.cache = SignalCache()
         self.webhook_url = "https://signals-bot-zely.onrender.com/webhook"
-        self.pairs = ["BTC/USDT", "ETH/USDT", "SOL/USDT"]
-        self.timeframes = ["3m", "5m", "15m"]
+        self.pairs = ["BTC/USDT", "ETH/USDT", "DOGE/USDT"]
+        self.timeframes = ["5m", "15m"]
         self.ohlcv_limit = 100
 
     def fetch_ohlcv(self, pair: str, timeframe: str) -> pd.DataFrame:
@@ -43,19 +43,12 @@ class SignalRunner:
 
     def send_to_webhook(self, signal) -> bool:
         try:
-            signal_data = signal.dict(exclude={'data_frame'})
+            signal_data = signal.dict() # data_frame is already excluded in Signal model
 
             # Convert all Timestamp objects to string
             for k, v in signal_data.items():
                 if isinstance(v, pd.Timestamp):
                     signal_data[k] = v.isoformat()
-
-            # Optionally convert DataFrame if present
-            if signal.data_frame is not None:
-                df = signal.data_frame.copy()
-                if "timestamp" in df.columns:
-                    df["timestamp"] = df["timestamp"].astype(str)
-                signal_data["data_frame"] = df.to_dict(orient="records")
 
             response = requests.post(
     self.webhook_url,
@@ -77,6 +70,12 @@ class SignalRunner:
             return False
 
     def process_pair(self, pair: str):
+        self.cache.get_active_signals() # Clean up stale signals and update active list
+        active_signals_count = len(self.cache.get_active_signals())
+        if active_signals_count >= 3:
+            logger.info(f"Max active trades (3) reached. Skipping new signals.")
+            return
+
         for timeframe in self.timeframes:
             df = self.fetch_ohlcv(pair, timeframe)
             if df is not None and len(df) > 20:
@@ -85,7 +84,6 @@ class SignalRunner:
                     if not self.cache.signal_exists(signal):
                         if self.send_to_webhook(signal):
                             self.cache.add_signal(signal)
-
     def run(self):
         logger.info("🚀 Starting Signal Runner")
         while True:
@@ -103,3 +101,5 @@ class SignalRunner:
 if __name__ == "__main__":
     runner = SignalRunner()
     runner.run()
+
+

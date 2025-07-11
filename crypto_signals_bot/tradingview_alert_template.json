@@ -14,5 +14,6 @@
   "momentum": "HIGH",
   "early_exit": false,
   "momentum_change": null,
-  "strategy_invalidated": false
+  "strategy_invalidated": false,
+  "slno": "{{strategy.slno}}"
 }

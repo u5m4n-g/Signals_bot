@@ -31,3 +31,167 @@
 2025-07-08 13:44:51,927 - runner - ERROR - Error sending webhook: Object of type Timestamp is not JSON serializable
 2025-07-08 13:44:52,073 - runner - ERROR - Error sending webhook: Object of type Timestamp is not JSON serializable
 2025-07-08 13:44:52,217 - runner - ERROR - Error sending webhook: Object of type Timestamp is not JSON serializable
+Traceback (most recent call last):
+  File "/home/ubuntu/Signals_bot/crypto_signals_bot/src/main.py", line 11, in <module>
+    from src.bot import send_telegram_alert, setup_telegram_bot
+ModuleNotFoundError: No module named 'src'
+2025-07-10 05:07:28,936 - runner - INFO - 🚀 Starting Signal Runner
+2025-07-10 05:07:31,271 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 5m
+2025-07-10 05:07:31,272 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 5m
+2025-07-10 05:07:31,276 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 5m
+2025-07-10 05:07:31,278 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 5m
+2025-07-10 05:07:31,279 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 5m
+2025-07-10 05:07:32,459 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 15m
+2025-07-10 05:07:32,460 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 15m
+2025-07-10 05:07:32,462 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 15m
+2025-07-10 05:07:32,463 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 15m
+2025-07-10 05:07:32,465 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 15m
+2025-07-10 05:07:33,670 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 5m
+2025-07-10 05:07:33,671 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 5m
+2025-07-10 05:07:33,673 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 5m
+2025-07-10 05:07:33,674 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 5m
+2025-07-10 05:07:33,676 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 5m
+2025-07-10 05:07:34,965 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 15m
+2025-07-10 05:07:34,966 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 15m
+2025-07-10 05:07:34,970 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 15m
+2025-07-10 05:07:34,975 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 15m
+2025-07-10 05:07:34,977 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 15m
+2025-07-10 05:07:36,171 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 5m
+2025-07-10 05:07:36,172 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 5m
+2025-07-10 05:07:36,175 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 5m
+2025-07-10 05:07:36,176 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 5m
+2025-07-10 05:07:36,178 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 5m
+2025-07-10 05:07:37,525 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 15m
+2025-07-10 05:07:37,528 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 15m
+2025-07-10 05:07:37,534 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 15m
+2025-07-10 05:07:37,536 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 15m
+2025-07-10 05:07:37,537 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 15m
+2025-07-10 05:10:37,657 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 5m
+2025-07-10 05:10:37,658 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 5m
+2025-07-10 05:10:37,660 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 5m
+2025-07-10 05:10:37,661 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 5m
+2025-07-10 05:10:37,662 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 5m
+2025-07-10 05:10:38,870 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 15m
+2025-07-10 05:10:38,870 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 15m
+2025-07-10 05:10:38,873 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 15m
+2025-07-10 05:10:38,874 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 15m
+2025-07-10 05:10:38,875 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 15m
+2025-07-10 05:10:40,154 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 5m
+2025-07-10 05:10:40,155 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 5m
+2025-07-10 05:10:40,157 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 5m
+2025-07-10 05:10:40,158 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 5m
+2025-07-10 05:10:40,160 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 5m
+2025-07-10 05:10:41,488 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 15m
+2025-07-10 05:10:41,489 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 15m
+2025-07-10 05:10:41,492 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 15m
+2025-07-10 05:10:41,493 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 15m
+2025-07-10 05:10:41,494 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 15m
+2025-07-10 05:10:42,531 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 5m
+2025-07-10 05:10:42,532 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 5m
+2025-07-10 05:10:42,534 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 5m
+2025-07-10 05:10:42,536 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 5m
+2025-07-10 05:10:42,537 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 5m
+2025-07-10 05:10:43,747 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 15m
+2025-07-10 05:10:43,747 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 15m
+2025-07-10 05:10:43,750 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 15m
+2025-07-10 05:10:43,751 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 15m
+2025-07-10 05:10:43,752 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 15m
+2025-07-10 05:13:43,794 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 5m
+2025-07-10 05:13:43,795 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 5m
+2025-07-10 05:13:43,799 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 5m
+2025-07-10 05:13:43,800 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 5m
+2025-07-10 05:13:43,801 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 5m
+2025-07-10 05:13:44,982 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 15m
+2025-07-10 05:13:44,983 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 15m
+2025-07-10 05:13:44,985 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 15m
+2025-07-10 05:13:44,986 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 15m
+2025-07-10 05:13:44,987 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 15m
+2025-07-10 05:13:46,360 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 5m
+2025-07-10 05:13:46,361 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 5m
+2025-07-10 05:13:46,364 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 5m
+2025-07-10 05:13:46,365 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 5m
+2025-07-10 05:13:46,367 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 5m
+2025-07-10 05:13:47,485 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 15m
+2025-07-10 05:13:47,486 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 15m
+2025-07-10 05:13:47,488 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 15m
+2025-07-10 05:13:47,491 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 15m
+2025-07-10 05:13:47,494 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 15m
+2025-07-10 05:13:48,584 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 5m
+2025-07-10 05:13:48,585 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 5m
+2025-07-10 05:13:48,588 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 5m
+2025-07-10 05:13:48,589 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 5m
+2025-07-10 05:13:48,590 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 5m
+2025-07-10 05:13:49,789 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 15m
+2025-07-10 05:13:49,789 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 15m
+2025-07-10 05:13:49,792 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 15m
+2025-07-10 05:13:49,793 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 15m
+2025-07-10 05:13:49,795 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 15m
+Traceback (most recent call last):
+  File "/home/ubuntu/Signals_bot/crypto_signals_bot/src/main.py", line 12, in <module>
+    from crypto_signals_bot.src.bot import send_telegram_alert
+ModuleNotFoundError: No module named 'crypto_signals_bot'
+2025-07-10 05:16:49,829 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 5m
+2025-07-10 05:16:49,830 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 5m
+2025-07-10 05:16:49,832 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 5m
+2025-07-10 05:16:49,833 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 5m
+2025-07-10 05:16:49,835 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 5m
+2025-07-10 05:16:51,184 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:51,184 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:51,187 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:51,188 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:51,190 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:51,857 - runner - INFO - 🚀 Starting Signal Runner
+2025-07-10 05:16:52,230 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:52,231 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:52,233 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:52,234 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:52,235 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:53,429 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:53,430 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:53,433 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:53,434 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:53,435 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:54,197 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 5m
+2025-07-10 05:16:54,198 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 5m
+2025-07-10 05:16:54,201 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 5m
+2025-07-10 05:16:54,202 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 5m
+2025-07-10 05:16:54,203 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 5m
+Traceback (most recent call last):
+  File "/home/ubuntu/Signals_bot/crypto_signals_bot/src/telegram_bot_runner.py", line 2, in <module>
+    from crypto_signals_bot.src.bot import setup_telegram_bot
+ModuleNotFoundError: No module named 'crypto_signals_bot'
+2025-07-10 05:16:54,629 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 5m
+2025-07-10 05:16:54,630 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 5m
+2025-07-10 05:16:54,633 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 5m
+2025-07-10 05:16:54,634 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 5m
+2025-07-10 05:16:54,635 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 5m
+2025-07-10 05:16:55,388 - strategies - INFO - VWAP Breakout: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:55,389 - strategies - INFO - EMA Cross: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:55,392 - strategies - INFO - RSI Divergence: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:55,393 - strategies - INFO - Support/Resistance Break: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:55,395 - strategies - INFO - Bollinger Squeeze: No valid signal for BTC/USDT 15m
+2025-07-10 05:16:55,829 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 15m
+2025-07-10 05:16:55,830 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 15m
+2025-07-10 05:16:55,832 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 15m
+2025-07-10 05:16:55,833 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 15m
+2025-07-10 05:16:55,835 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 15m
+2025-07-10 05:16:56,648 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:56,649 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:56,652 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:56,653 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:56,654 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 5m
+2025-07-10 05:16:57,972 - strategies - INFO - VWAP Breakout: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:57,973 - strategies - INFO - EMA Cross: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:57,976 - strategies - INFO - RSI Divergence: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:57,977 - strategies - INFO - Support/Resistance Break: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:57,978 - strategies - INFO - Bollinger Squeeze: No valid signal for ETH/USDT 15m
+2025-07-10 05:16:59,068 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 5m
+2025-07-10 05:16:59,068 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 5m
+2025-07-10 05:16:59,071 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 5m
+2025-07-10 05:16:59,072 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 5m
+2025-07-10 05:16:59,073 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 5m
+2025-07-10 05:17:00,282 - strategies - INFO - VWAP Breakout: No valid signal for DOGE/USDT 15m
+2025-07-10 05:17:00,282 - strategies - INFO - EMA Cross: No valid signal for DOGE/USDT 15m
+2025-07-10 05:17:00,285 - strategies - INFO - RSI Divergence: No valid signal for DOGE/USDT 15m
+2025-07-10 05:17:00,285 - strategies - INFO - Support/Resistance Break: No valid signal for DOGE/USDT 15m
+2025-07-10 05:17:00,287 - strategies - INFO - Bollinger Squeeze: No valid signal for DOGE/USDT 15m
