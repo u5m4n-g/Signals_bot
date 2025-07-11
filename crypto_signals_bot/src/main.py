@@ -10,6 +10,7 @@ import pandas as pd
 
 from src.bot import send_telegram_alert
 from src.strategies import validate_signal, Signal
+
 app = FastAPI()
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
@@ -26,7 +27,7 @@ last_alert_time: Dict[str, float] = {
     "SOL/USDT": 0,
 }
 
-class Signal(BaseModel):
+class WebhookSignal(BaseModel):
     pair: str
     direction: str
     strategy: str
@@ -36,32 +37,16 @@ class Signal(BaseModel):
     targets: List[float]
     confidence: float
     momentum: str
-    early_exit: bool = False
+    early_exit: Optional[bool] = False
     momentum_change: Optional[str] = None
-    strategy_invalidated: bool = False
+    strategy_invalidated: Optional[bool] = False
     exit_reason: Optional[str] = None
-    data_frame: Optional[pd.DataFrame] = Field(default=None, exclude=True)
-
-    class Config:
-        arbitrary_types_allowed = True
-        extra = 'ignore'
-        json_encoders = {
-            pd.DataFrame: lambda _: None,
-            pd.Timestamp: lambda ts: ts.isoformat() if not pd.isna(ts) else None
-        }
-
-def can_send_alert(pair: str) -> bool:
-    with rate_limit_lock:
-        now = time.time()
-        if now - last_alert_time.get(pair, 0) >= 120:
-            last_alert_time[pair] = now
-            return True
-        return False
 
 @app.post("/webhook")
 async def webhook(request: Request, x_webhook_secret: Optional[str] = Header(None, alias="X-Webhook-Secret")):
     if x_webhook_secret != WEBHOOK_SECRET:
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid webhook secret")
+
     try:
         payload = await request.json()
     except Exception as e:
@@ -85,7 +70,13 @@ async def webhook(request: Request, x_webhook_secret: Optional[str] = Header(Non
 
     return JSONResponse(content={"message": "✅ Signal processed"}, status_code=200)
 
+def can_send_alert(pair: str) -> bool:
+    with rate_limit_lock:
+        now = time.time()
+        if now - last_alert_time.get(pair, 0) >= 120:
+            last_alert_time[pair] = now
+            return True
+        return False
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-
-
