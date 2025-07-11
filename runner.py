@@ -6,7 +6,7 @@ import logging
 import requests
 import pandas as pd
 from typing import List, Dict
-from crypto_signals_bot.src.strategies import calculate_all_strategies
+from src.strategies import calculate_all_strategies
 from signal_cache import SignalCache
 
 from dotenv import load_dotenv

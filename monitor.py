@@ -46,7 +46,7 @@ class SignalMonitor:
 
         # Check momentum (if we have the data)
         if 'data_frame' in signal and signal['data_frame'] is not None:
-            from crypto_signals_bot.src.strategies import detect_momentum_change
+            from src.strategies import detect_momentum_change
             momentum = detect_momentum_change(signal['data_frame'])
             if momentum == "LOW":
                 signal['early_exit'] = True
