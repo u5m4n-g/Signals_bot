@@ -1,3 +1,5 @@
+from crypto_signals_bot.src.strategies import calculate_all_strategies
+
 # runner.py
 import os
 import ccxt
@@ -6,7 +8,7 @@ import logging
 import requests
 import pandas as pd
 from typing import List, Dict
->>>>>>> df68952
+
 from signal_cache import SignalCache
 
 from dotenv import load_dotenv
@@ -102,4 +104,7 @@ if __name__ == "__main__":
     runner = SignalRunner()
     runner.run()
 
+
+
+from crypto_signals_bot.src.strategies import calculate_all_strategies
 

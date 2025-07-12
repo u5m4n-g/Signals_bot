@@ -145,8 +145,8 @@ def calculate_vwap_breakout(df: pd.DataFrame, pair: str, timeframe: str) -> Opti
     
     if bullish and vol_confirmed:
         atr = _calculate_atr(df)
-        stop = round(current_price - 1.5 * atr, 2)
-        targets = [round(current_price + r * atr, 2) for r in [1, 1.5, 2]]
+        stop = round(current_price - atr, 2)
+        targets = [round(current_price + r * atr, 2) for r in [1, 2, 3]]
         signal = Signal(
             pair=pair,
             direction="BUY",
@@ -162,8 +162,8 @@ def calculate_vwap_breakout(df: pd.DataFrame, pair: str, timeframe: str) -> Opti
     
     elif bearish and vol_confirmed:
         atr = _calculate_atr(df)
-        stop = round(current_price + 1.5 * atr, 2)
-        targets = [round(current_price - r * atr, 2) for r in [1, 1.5, 2]]
+        stop = round(current_price + atr, 2)
+        targets = [round(current_price - r * atr, 2) for r in [1, 2, 3]]
         signal = Signal(
             pair=pair,
             direction="SELL",
@@ -190,8 +190,8 @@ def calculate_ema_cross(df: pd.DataFrame, pair: str, timeframe: str) -> Optional
     
     if bullish:
         atr = _calculate_atr(df)
-        stop = round(current_price - 1.5 * atr, 2)
-        targets = [round(current_price + r * atr, 2) for r in [1, 1.5, 2]]
+        stop = round(current_price - atr, 2)
+        targets = [round(current_price + r * atr, 2) for r in [1, 2, 3]]
         angle = (ema9.iloc[-1] - ema9.iloc[-3]) / (ema9.iloc[-3] or 1)
         signal = Signal(
             pair=pair,
@@ -208,8 +208,8 @@ def calculate_ema_cross(df: pd.DataFrame, pair: str, timeframe: str) -> Optional
     
     elif bearish:
         atr = _calculate_atr(df)
-        stop = round(current_price + 1.5 * atr, 2)
-        targets = [round(current_price - r * atr, 2) for r in [1, 1.5, 2]]
+        stop = round(current_price + atr, 2)
+        targets = [round(current_price - r * atr, 2) for r in [1, 2, 3]]
         angle = (ema9.iloc[-3] - ema9.iloc[-1]) / (ema9.iloc[-3] or 1)
         signal = Signal(
             pair=pair,
@@ -246,8 +246,8 @@ def calculate_rsi_divergence(df: pd.DataFrame, pair: str, timeframe: str) -> Opt
         if (price_low2 < price_low1) and (rsi_low2 > rsi_low1) and (current_rsi > 30):
             current_price = df["close"].iloc[-1]
             atr = _calculate_atr(df)
-            stop = round(current_price - 1.5 * atr, 2)
-            targets = [round(current_price + r * atr, 2) for r in [1, 1.5, 2]]
+            stop = round(current_price - atr, 2)
+            targets = [round(current_price + r * atr, 2) for r in [1, 2, 3]]
             signal = Signal(
                 pair=pair,
                 direction="BUY",
@@ -271,8 +271,8 @@ def calculate_rsi_divergence(df: pd.DataFrame, pair: str, timeframe: str) -> Opt
         if (price_high2 > price_high1) and (rsi_high2 < rsi_high1) and (current_rsi < 70):
             current_price = df["close"].iloc[-1]
             atr = _calculate_atr(df)
-            stop = round(current_price + 1.5 * atr, 2)
-            targets = [round(current_price - r * atr, 2) for r in [1, 1.5, 2]]
+            stop = round(current_price + atr, 2)
+            targets = [round(current_price - r * atr, 2) for r in [1, 2, 3]]
             signal = Signal(
                 pair=pair,
                 direction="SELL",
@@ -308,8 +308,8 @@ def calculate_support_resistance_break(df: pd.DataFrame, pair: str, timeframe: s
     if (res_touches >= 2 and current_price > resistance 
         and df["close"].iloc[-2] <= resistance and current_volume > avg_volume * 1.2):
         atr = _calculate_atr(df)
-        stop = round(current_price - 1.5 * atr, 2)
-        targets = [round(current_price + r * atr, 2) for r in [1, 1.5, 2]]
+        stop = round(current_price - atr, 2)
+        targets = [round(current_price + r * atr, 2) for r in [1, 2, 3]]
         signal = Signal(
             pair=pair,
             direction="BUY",
@@ -326,8 +326,8 @@ def calculate_support_resistance_break(df: pd.DataFrame, pair: str, timeframe: s
     elif (sup_touches >= 2 and current_price < support 
           and df["close"].iloc[-2] >= support and current_volume > avg_volume * 1.2):
         atr = _calculate_atr(df)
-        stop = round(current_price + 1.5 * atr, 2)
-        targets = [round(current_price - r * atr, 2) for r in [1, 1.5, 2]]
+        stop = round(current_price + atr, 2)
+        targets = [round(current_price - r * atr, 2) for r in [1, 2, 3]]
         signal = Signal(
             pair=pair,
             direction="SELL",
@@ -362,8 +362,8 @@ def calculate_bollinger_squeeze(df: pd.DataFrame, pair: str, timeframe: str) -> 
         # Bullish breakout
         if (prev_price <= upper.iloc[-2]) and (current_price > upper.iloc[-1]):
             atr = _calculate_atr(df)
-            stop = round(current_price - 1.5 * atr, 2)
-            targets = [round(current_price + r * atr, 2) for r in [1, 1.5, 2]]
+            stop = round(current_price - atr, 2)
+            targets = [round(current_price + r * atr, 2) for r in [1, 2, 3]]
             signal = Signal(
                 pair=pair,
                 direction="BUY",
@@ -380,8 +380,8 @@ def calculate_bollinger_squeeze(df: pd.DataFrame, pair: str, timeframe: str) -> 
         # Bearish breakout
         elif (prev_price >= lower.iloc[-2]) and (current_price < lower.iloc[-1]):
             atr = _calculate_atr(df)
-            stop = round(current_price + 1.5 * atr, 2)
-            targets = [round(current_price - r * atr, 2) for r in [1, 1.5, 2]]
+            stop = round(current_price + atr, 2)
+            targets = [round(current_price - r * atr, 2) for r in [1, 2, 3]]
             signal = Signal(
                 pair=pair,
                 direction="SELL",

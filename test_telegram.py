@@ -1,9 +1,12 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 import asyncio
 from telegram import Bot
 
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN") or "7773093247:AAEHYC48CqkF7J9n2e-Xu3dlvXuv2DlK8Is"
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID") or "7915749117"
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 async def send_test():
     bot = Bot(token=TELEGRAM_TOKEN)
@@ -11,3 +14,5 @@ async def send_test():
 
 if __name__ == "__main__":
     asyncio.run(send_test())
+
+
